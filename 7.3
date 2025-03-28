@@ -61,4 +61,50 @@ public class StudentCRUD {
 
             System.out.println("\nStudentID\tName\tDepartment\tMarks");
             while (rs.next()) {
-                System.out.println(rs.getInt
+                System.out.println(rs.getInt("StudentID") + "\t" + rs.getString("Name") +
+                        "\t" + rs.getString("Department") + "\t" + rs.getDouble("Marks"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateStudent() {
+        try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            System.out.print("Enter StudentID to update: ");
+            int id = sc.nextInt();
+            System.out.print("Enter new Marks: ");
+            double marks = sc.nextDouble();
+
+            String query = "UPDATE Student SET Marks = ? WHERE StudentID = ?";
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.setDouble(1, marks);
+            pstmt.setInt(2, id);
+
+            int rows = pstmt.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Student updated successfully!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteStudent() {
+        try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            System.out.print("Enter StudentID to delete: ");
+            int id = sc.nextInt();
+
+            String query = "DELETE FROM Student WHERE StudentID = ?";
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.setInt(1, id);
+
+            int rows = pstmt.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Student deleted successfully!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
